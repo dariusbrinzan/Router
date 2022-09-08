@@ -1,0 +1,33 @@
+322CA - Brinzan Darius Ionut
+
+             Tema 1 - Router
+
+Task-uri rezolvate : protocol ARP, forwarding, bonus_checksum - RFC1624.
+Pentru inceput mi-am extras toate headerele necesare rezolvarii task-urilor.
+
+La inceput am verificat daca pachetul este unul de tip ARP :
+    -> verific daca acesta este unul de tip REQUEST / REPLY
+    -> daca este de tip REQUEST : sursa mea practic doreste sa afle adresa mac, iar eu trimit
+    inapoi adresa mac dorita.
+    -> daca este de tip REPLY : aici am fost nevoit sa folosesc o coada principala + una auxiliara 
+    care m-a ajutat in cazul in care inca mai am pachete in coada initiala care nu au destinatie,
+    le-am adaugat in coada auxiliara iar la final am schimbat cozile . In plus, verific daca in coada
+    mea initiala se afla pachete care trebuie trimise la adresa ceruta, iar daca este asa le trimit
+    la adresa mac primita.
+Procesul de forwarding :
+    -> calculez liniar ruta cea mai buna pentru ip-ul meu primit ca destinatie cu ajutorul functiei din laborator
+    -> verific daca checksum-ul este unul valid, daca nu dau continue si arunc pachetul
+    -> modific checksum-ul cu functia bonus_checksum (RFC1624) in care in acelasi timp decrementez ttl-ul,
+    dupa care cu adresa mac a sursei (adresa mac a interfetei pe care se transmite), adresa mac a destinatiei
+    si cu tipul pachetului completez headerul dorit.
+    -> daca entry-ul meu este null, adica daca nu a fost gasita nicio intrare in tabela mea arp, ma folosesc
+    de o adresa de broadcast pentru a 'intreba' in reteaua mea care este adresa mac a unei adrese ip, adica practic
+    unde ar trebui sa fie urmatorul hop.
+Bonus_checksum : decrementez ttl-ul si updatez checksum-ul. M-am inspirat de pe site-ul oferit in documentatia temei.
+
+Pentru functia de get_arp_entry m-am inspirat din laboratorul 4.
+
+Probleme intampinate : 
+    -> Destul de greu de interactionat cu terminalele si cu wireshark, fara un tutorial clar.
+    -> Imi cer scuze ca am incarcat de multe ori pe vmchecker dar am avut un bug super urat unde pe local cu checkerul vechi imi mergea
+    bs-ul iar pe vmchecker imi pica, iar acum am decis sa las cautarea sa fie liniara fiindca nu am mai reusit sa-i dau de cap :)
